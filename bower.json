@@ -1,0 +1,23 @@
+{
+  "name": "angular-apibase",
+  "version": "0.0.1",
+  "description": "An APIBase.js wrapper for AngularJS",
+  "main": "angular-apibase.js",
+  "keywords": [
+    "apibase",
+    "angularjs",
+    "firebase"
+  ],
+  "authors": [
+    "Abraham Haskins <abe@rigidflame.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}
