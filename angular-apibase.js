@@ -8,9 +8,29 @@
             var apibase = new APIBase(ref),
                 $scope = $rootScope.$new(true);
         
-            apibase.retrieve().then(function (API) {
+            apibase.retrieve().then(exposeAPI);
+            
+            $scope.setMethods = function (APIList) {
+                var API = {};
+                for (var i=0; i<APIList.length; i++) {
+                    API[APIList[i]] = true;
+                }
+                exposeAPI(API);
+            };
+            
+            function wrap(func) {
+                return function () {
+                    if (!$rootScope.$$phase)
+                        $rootScope.$apply(func.apply(func, arguments));
+                    else
+                        func.apply(func, arguments);
+                }; 
+            }
+            
+            function exposeAPI(API) {
+                if ($scope.API) return;
+                $scope.API = {};
                 angular.forEach(API, function (method, methodName) {
-                    $scope.API = {};
                     $scope.API[methodName] = function () {
                         var promise = API[methodName].apply(API, arguments);
                         return {
@@ -27,16 +47,9 @@
                         };
                     };
                 });
+
+                $scope.$broadcast("ready", $scope.API);
                 $scope.$apply();
-            });
-            
-            function wrap(func) {
-                return function () {
-                    if (!$rootScope.$$phase)
-                        $rootScope.$apply(func.apply(func, arguments));
-                    else
-                        func.apply(func, arguments);
-                }; 
             }
             
             return $scope;
